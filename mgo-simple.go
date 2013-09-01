@@ -13,6 +13,7 @@ import (
 
 type Books []Book
 type Book struct {
+	// omitempty so mongodb itself will generate the id if omitted
 	Id        bson.ObjectId `bson:"_id,omitempty" json:"id"`
 	Title     string        `bson:"t"             json:"title"`
 	Published time.Time     `bson:"i"             json:"published"`
@@ -31,6 +32,12 @@ func main() {
 	coll := db.C("bookcoll")
 
 	// Insert some books
+	mine := Book{
+		bson.NewObjectId(),
+		"I never wrote a book",
+		bson.Now(),
+	}
+	coll.Insert(&mine)
 	hpott := Book{
 		bson.NewObjectId(),
 		"Harry Potter",
